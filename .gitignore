@@ -1,0 +1,8 @@
+# ignorar el cache de python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# ignorar los archivos temporales de python
+*.pyt
