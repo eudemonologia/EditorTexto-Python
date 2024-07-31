@@ -15,6 +15,9 @@ class App(tk.Tk):
 
         self.__texto = tk.Text(self)
         self.__texto.grid(row=0, column=1, sticky="nsew")
+        self.__texto.focus()
+
+        self.__monitor_cambios()
 
     # Funcion que crea el menu archivo
     def __menu(self):
@@ -64,6 +67,7 @@ class App(tk.Tk):
         self.archivo = "Archivo Nuevo"
         self.title(f"Editor de texto - {self.archivo}")
         self.__texto.delete("1.0", tk.END)
+        self.__texto.edit_modified(False)
 
     def __abrir(self):
         self.archivo = filedialog.askopenfilename(
@@ -82,6 +86,7 @@ class App(tk.Tk):
         else:
             with open(self.archivo, "w") as f:
                 f.write(self.__texto.get("1.0", tk.END))
+            self.__texto.edit_modified(False)
 
     def __guardar_como(self):
         self.archivo = filedialog.asksaveasfilename(
@@ -101,6 +106,14 @@ class App(tk.Tk):
 
     def __pegar(self):
         self.__texto.event_generate("<<Paste>>")
+
+    # Funcion que monitorea los cambios en el texto
+    def __monitor_cambios(self):
+        if self.__texto.edit_modified():
+            self.title(f"Editor de texto - {self.archivo} *")
+        else:
+            self.title(f"Editor de texto - {self.archivo}")
+        self.after(100, self.__monitor_cambios)
 
 
 if __name__ == "__main__":
